@@ -4,8 +4,6 @@ networks:
   laravel: #creara la red llamada course_laravel, $nombrecarpeta_$nombredered
 
 services:
-
-
   apache:
     build:
       context: .
