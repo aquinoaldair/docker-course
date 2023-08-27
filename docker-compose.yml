@@ -5,19 +5,19 @@ networks:
 
 services:
 
-  nginx:
+
+  apache:
     build:
       context: .
-      dockerfile: nginx.dockerfile
-    image: nginx:stable-alpine
-    container_name: nginx
+      dockerfile: apache.dockerfile
+    container_name: apache
     ports:
-      - 80:80 #Izquierda(Local PC) - Derecha (Contenedor)
+      - 80:80
       - 443:443
+    volumes:
+      - ./src:/var/www/html
     networks:
       - laravel
-    volumes:
-      - ./src:/var/www/html #usr/share/nginx/html Izquierda(Directorio del código de la P) - DERECHA(director predeterminado donde se configuran los archivos web)
   php:
     image: php:7.4.33-fpm-alpine
     container_name: php
