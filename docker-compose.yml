@@ -1,0 +1,36 @@
+version: '1.0.0'
+
+networks:
+  laravel: #creara la red llamada course_laravel, $nombrecarpeta_$nombredered
+
+services:
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - 80:80 #Izquierda(Local PC) - Derecha (Contenedor)
+      - 443:443
+    networks:
+      - laravel
+    volumes:
+      - ./src:/var/www/html #usr/share/nginx/html Izquierda(Directorio del código de la P) - DERECHA(director predeterminado donde se configuran los archivos web)
+  php:
+    image: php:7.4.33-fpm-alpine
+    container_name: php
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:5.7.43
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: laraveldb
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    networks:
+      - laravel
