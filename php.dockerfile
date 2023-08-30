@@ -12,6 +12,6 @@ RUN apk --no-cache add shadow && usermod -u 1000 www-data
 #instala dependencias faltantes para laravel
 RUN docker-php-ext-install pdo pdo_mysql
 
-#copia del servicio de composer y lo usa aqui
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
