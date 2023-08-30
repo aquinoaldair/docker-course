@@ -1,34 +1,56 @@
 version: '1.0.0'
 
 networks:
-  laravel: #creara la red llamada course_laravel, $nombrecarpeta_$nombredered
+  laravel:
 
 services:
-  apache:
+  nginx:
     build:
       context: .
-      dockerfile: apache.dockerfile
-    container_name: apache
+      dockerfile: nginx.dockerfile
+    image: nginx:stable-alpine
+    container_name: nginx
+    depends_on:
+      - php
+      - mysql
     ports:
-      - 80:80
+      - 80:80 #Izquierda(Local PC) - Derecha (Contenedor)
       - 443:443
-    volumes:
-      - ./src:/var/www/html
     networks:
       - laravel
+    volumes:
+      - ./src:/var/www/html
+
   php:
-    image: php:7.4.33-fpm-alpine
+    build:
+      context: .
+      dockerfile: php.dockerfile
     container_name: php
     networks:
       - laravel
+    volumes:
+      - ./src:/var/www/html
 
   mysql:
     image: mysql:5.7.43
     container_name: mysql
+    ports:
+      - 4306:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
     environment:
       MYSQL_DATABASE: laraveldb
       MYSQL_USER: laravel
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
+    networks:
+      - laravel
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
     networks:
       - laravel
