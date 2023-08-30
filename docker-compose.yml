@@ -49,6 +49,8 @@ services:
   composer:
     image: composer:latest
     container_name: composer
+    depends_on:
+      - php
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
